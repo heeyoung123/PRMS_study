@@ -1,38 +1,15 @@
-const express = require("express");
-const app = express();
-app.listen(1231);
-app.get("/:id", (req, res) => {
-  let { id } = req.params;
-  id = parseInt(id);
-  res.json(db.get(id));
-  if (db.get(id) == undefined) {
-    res.send("실패!");
-  } else {
-    product = db.get(id);
-    product.id = id;
-    res.json(product);
-  }
+//map 함수(메서드) vs foreach차이
+
+const arr = [1, 2, 3, 4, 5];
+
+const foreachArr = arr.forEach(function (a, b, c) {
+  return a * 2;
+});
+const mapArr = arr.map(function (a, b, c) {
+  return a * 2;
 });
 
-let db = new Map();
-// db.set(키, 벨류) 키로 벨류를 찾을 수 있는 한 쌍을 저장한다
-
-let notebook = {
-  productName: "Notebook",
-  price: 20000,
-};
-let cup = {
-  productName: "Cup",
-  price: 2500,
-};
-let chair = {
-  productName: "Chair",
-  price: 43000,
-};
-
-db.set(1, notebook);
-db.set(2, cup);
-db.set(3, chair);
-
-console.log(db);
-console.log(db.get(1));
+console.log(
+  `foreach로 반환하면 ${foreachArr} 이고 map으로 반환하면  ${mapArr}`
+);
+//map으로는 새로운 배열을 반환할 수 있지만 forEach는 반환할수없다.

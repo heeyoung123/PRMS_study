@@ -1,4 +1,5 @@
 const express = require("express");
+const { json } = require("stream/consumers");
 const app = express();
 app.listen(1234);
 
@@ -20,8 +21,12 @@ db.set(id++, youtuber1);
 db.set(id++, youtuber2);
 
 //REST API
-app.get("/yout", function (req, res) {
-  res.json();
+app.get("/youtubers", function (req, res) {
+  let youtubers = {};
+  db.forEach(function (value, key) {
+    youtubers[key] = value;
+  });
+  res.json(youtubers);
 });
 app.get("/youtuber/:id", function (req, res) {
   let { id } = req.params;
@@ -44,4 +49,54 @@ app.post("/youtuber", (req, res) => {
   res.json({
     message: `${db.get(id - 1).channelTitle}  님, 유튜버 생활을 응원합니다.`,
   });
+});
+
+//삭제
+app.delete("/youtubers/:id", (req, res) => {
+  let { id } = req.params;
+  id = parseInt(id);
+  let youtuber = db.get(id);
+  const channelTitle = youtuber.channelTitle;
+  if (youtuber == undefined) {
+    res.json({
+      message: `요청하신 ${id}번은 없는 유튜버입니다.`,
+    });
+  } else {
+    db.delete(id);
+    res.json({
+      message: `${channelTitle}님, 우리 인연은 여기까지`,
+    });
+  }
+});
+
+//전체 삭제
+app.delete("/youtubers", function (req, res) {
+  if (db.size >= 1) {
+    db.clear((msg = "전체 유튜버가 삭제되었습니다."));
+  } else {
+    msg = "삭제할 유튜버가 없다";
+  }
+  res.json({
+    message: msg,
+  });
+});
+
+//수정
+app.put("/youtubers/:id", (req, res) => {
+  let { id } = req.params;
+  id = parseInt(id);
+  let youtuber = db.get(id);
+  let oldTitle = youtuber.channelTitle;
+  if (youtuber == undefined) {
+    res.json({
+      message: `요청하신 ${id}번은 없는 유튜버입니다.`,
+    });
+  } else {
+    let newTitle = req.body.channelTitle;
+    youtuber.channelTitle = newTitle;
+    db.set(id, youtuber);
+    res.json({
+      message: `${oldTitle}님, 채널명이 ${newTitle}로 변경되었습니다.`,
+    });
+  }
 });
