@@ -2,15 +2,43 @@
 const express = require("express");
 const app = express();
 app.listen(7777);
-
+app.use(express.json());
 let id = 1;
 let db = new Map();
 
 //로그인
-app.post("/login", function (req, res) {});
+
+app.post("/login", function (req, res) {
+  const { userID, password } = req.body;
+
+  let loginUser = {};
+  db.forEach(function (user, id) {
+    if (user.userID === userID) {
+      loginUser = user;
+    }
+  });
+
+  if (isExist(loginUser)) {
+    console.log("같은거 찾았음");
+    if (loginUser.password === password) {
+      console.log("둘다있따");
+    } else {
+      console.log("패스워드 틀렸다.");
+    }
+  } else {
+    console.log("둘다 틀렸다");
+  }
+});
+function isExist(obj) {
+  if (Object.keys(obj).length) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 //회원가입
-app.use(express.json());
+
 app.post("/join", function (req, res) {
   if (req.body) {
     db.set(id++, req.body);
