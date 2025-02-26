@@ -1,31 +1,45 @@
-const exp = require("constants");
 const express = require("express");
-const app = express();
-app.listen(7777);
-app.use(express.json());
+const router = express.Router();
+
+router.use(express.json());
 
 let db = new Map();
 let id = 1;
 
-app
-  .route("/channels")
+router
+  .route("/")
   .get((req, res) => {
-    if (db.size !== 0) {
+    if (db.size) {
+      let { userId } = req.body;
       let channels = [];
-      db.forEach(function (value, key) {
-        channels.push(value);
-      });
-      res.status(200).json(channels);
+      if (userId) {
+        db.forEach(function (value, key) {
+          if (value.userId === userId) channels.push(value);
+        });
+
+        if (channels.length) {
+          res.status(200).json(channels);
+        } else {
+          res.status(404).json({
+            msg: "조회할 채널이 없습니다.",
+          });
+        }
+      } else {
+        res.status(404).json({
+          msg: "로그인이 필요한 페이지입니다.",
+        });
+      }
     } else {
       res.status(404).json({
-        message: "조회할 유튜버가 없습니다.",
+        msg: "조회할 채널이 없습니다.",
       });
     }
   })
 
   .post((req, res) => {
     if (req.body.channelTitle) {
-      db.set(id++, req.body);
+      let channel = req.body;
+      db.set(id++, channel);
       res.status(201).json({ msg: `${db.get(id - 1).channelTitle} 님 홧팅` });
     } else {
       res.status(400).json({
@@ -33,8 +47,8 @@ app
       });
     }
   });
-app
-  .route("/channels/:id")
+router
+  .route("/:id")
   .get((req, res) => {
     let { id } = req.params;
     id = parseInt(id);
@@ -81,3 +95,4 @@ app
       });
     }
   });
+module.exports = router;
