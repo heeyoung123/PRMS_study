@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
-app.listen(1234);
+const dotenv = require("dotenv");
+dotenv.config();
+app.listen(process.env.PORT);
 
 const members = [
   { id: 1, name: "Kim", age: 22, married: false },
