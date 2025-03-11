@@ -5,14 +5,14 @@ dotenv.config();
 
 app.listen(process.env.PORT);
 
-const userRouter = require("./routes/users");
-const userRouter = require("./routes/books");
-const userRouter = require("./routes/likes");
-const userRouter = require("./routes/carts");
-const userRouter = require("./routes/orders");
+const usersRouter = require("./routes/users");
+const booksRouter = require("./routes/books");
+const likesRouter = require("./routes/likes");
+const cartsRouter = require("./routes/carts");
+const ordersRouter = require("./routes/orders");
 
-app.use("/users", userRouter);
-app.use("/books", userRouter);
-app.use("/carts", userRouter);
-app.use("/likes", userRouter);
-app.use("/orders", userRouter);
+app.use("/users", usersRouter);
+app.use("/books", booksRouter);
+app.use("/carts", cartsRouter);
+app.use("/likes", likesRouter);
+app.use("/orders", ordersRouter);

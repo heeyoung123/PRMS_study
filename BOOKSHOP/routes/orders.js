@@ -12,4 +12,4 @@ router.get("/", (req, res) => {
 router.get("/:id", (req, res) => {
 });
 
-export default router;
+module.exports = router;
