@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 dotenv.config();
 const crypto = require("crypto");
+
+
 const join = (req, res) => {
   const {email, password} = req.body;
   let sql = "INSERT INTO users (email,password,salt) VALUES (?,?,?)";
