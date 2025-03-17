@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 
-
 const {join, login, requestPasswordReset, passwordReset} = require("../controller/userController");
 
 router.use(express.json());
